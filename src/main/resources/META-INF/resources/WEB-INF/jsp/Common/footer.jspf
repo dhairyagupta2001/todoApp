@@ -1,0 +1,45 @@
+<style>
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; /* This makes the main content area take the remaining space */
+    padding-bottom: 80px; /* Add enough space for the footer height */
+}
+
+footer {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 20px 15px; /* Increased padding for thickness */
+    font-size: 1rem; /* Slightly larger font size */
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+    position: fixed; /* Fixed footer */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%; /* Full width */
+}
+
+footer a {
+    color: #ffcc80;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #ffe082;
+}
+</style>
+
+<!-- Footer -->
+<footer>
+    <p>
+        &copy; 2025 TodoApp. All Rights Reserved. | <a href="privacy-policy.html">Privacy Policy</a>
+    </p>
+</footer>

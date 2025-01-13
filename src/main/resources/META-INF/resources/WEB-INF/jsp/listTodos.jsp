@@ -1,189 +1,258 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-        }
-
-        h1 {
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Todo List</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<style>
+.classic-header {
+    font-family: 'Georgia', serif; /* Classic serif font */
+    font-size: 40px;
+    font-weight: 700;
+    color: #333;  /* Dark, classic text color */
+    text-align: center; /* Center alignment for a balanced look */
+    text-transform: uppercase; /* Uppercase for more formality */
+    letter-spacing: 2px; /* Increased letter spacing for elegance */
+    margin-bottom: 40px; /* Add more space beneath the header */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+ body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #00c6ff, #0072ff); /* Bluish gradient */
             color: #333;
-            text-align: center;
+            margin: 0;
+            padding: 0;
         }
 
-        .todo-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+h1 {
+	color: #333;
+	text-align: center;
+	margin-bottom: 30px;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+.todo-container {
+	max-width: 1000px;
+	margin: 20px auto;
+	padding: 20px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	overflow-x: auto;
+}
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+.status-badge {
+	padding: 6px 12px;
+	border-radius: 20px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
 
-        th {
-            background: #2575fc;
-            color: #fff;
-        }
+.status-pending {
+	background-color: #ffeeba;
+	color: #856404;
+}
 
-        tr:nth-child(even) {
-            background: #f9f9f9;
-        }
+.status-completed {
+	background-color: #d4edda;
+	color: #155724;
+}
 
-        tr:hover {
-            background: #f1f1f1;
-        }
+.completed-row {
+	background-color: #f8f9fa !important;
+	color: #6c757d;
+}
 
-        .completed {
-            text-decoration: line-through;
-            color: #888;
-        }
+.completed-row td {
+	text-decoration: line-through;
+}
 
-        .action-btn {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: #fff;
-        }
+.completed-row td:last-child, .completed-row td.status-cell {
+	text-decoration: none;
+}
 
-        .complete-btn {
-            background: #28a745;
-        }
+.action-buttons {
+	display: flex;
+	gap: 5px;
+}
 
-        .delete-btn {
-            background: #dc3545;
-        }
+.toast-container {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 1050;
+}
 
-        .add-btn {
-            background: #007bff;
-            margin-bottom: 20px;
-            display: block;
-            text-align: center;
-        }
+.custom-toast {
+	background: white;
+	border-radius: 8px;
+	padding: 15px;
+	margin-bottom: 10px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	animation: slideIn 0.5s ease-out;
+}
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
+@
+keyframes slideIn {from { transform:translateX(100%);
+	opacity: 0;
+}
 
-        .modal-content {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 400px;
-            width: 100%;
-        }
+to {
+	transform: translateX(0);
+	opacity: 1;
+}
 
-        .modal-header {
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
-
-        .modal-actions {
-            text-align: right;
-            margin-top: 15px;
-        }
-
-        .modal-actions button {
-            margin-left: 10px;
-        }
-    </style>
+}
+@media ( max-width : 768px) {
+	.action-buttons {
+		flex-direction: column;
+		gap: 3px;
+	}
+	.action-btn {
+		width: 100%;
+		text-align: center;
+	}
+}
+</style>
 </head>
 <body>
-    <h1>Your Todo List</h1>
-    <div class="todo-container">
-        <a href='add-todo' class="btn btn-success mb-3">Add Task</a>
-        
-        <c:choose>
-            <c:when test="${not empty todos}">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Username</th>
-                            <th>Description</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="todo" items="${todos}">
-                            <tr class="${todo.done ? 'completed' : ''}">
-                                <td>${todo.id}</td>
-                                <td>${todo.username}</td>
-                                <td>${todo.description}</td>
-                                <td>${todo.date}</td>
-                                <td>${todo.done ? 'Completed' : 'Pending'}</td>
-                                <td>
-                                    <button class="action-btn complete-btn" onclick="markComplete(${todo.id})">Complete</button>
-                                    <button class="action-btn delete-btn" onclick="deleteTask(${todo.id})">Delete</button>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </c:when>
-            <c:otherwise>
-                <p style="text-align: center; color: #888;">No tasks to display!</p>
-            </c:otherwise>
-        </c:choose>
-    </div>
 
-   <script>
-    function redirectToAddTask() {
-        window.location.href = "todo.jsp"; // Redirect to addTask.jsp
-    }
-</script>
 
-    <script>
-        function openModal() {
-            document.getElementById('addTaskModal').style.display = 'flex';
+	<div class="toast-container"></div>
+	<%@include file="Common/navigation.jspf"%>
+	<div class="container mt-5 pt-5">
+		<h1 class="classic-header">Your Todo List</h1>
+		<div class="todo-container">
+			<a href='add-todo' class="btn btn-success mb-3">Add Task</a>
+
+			<c:if test="${not empty successMessage}">
+				<div class="alert alert-success alert-dismissible fade show"
+					role="alert">
+					${successMessage}
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Close"></button>
+				</div>
+			</c:if>
+
+			<c:if test="${not empty errorMessage}">
+				<div class="alert alert-danger alert-dismissible fade show"
+					role="alert">
+					${errorMessage}
+					<button type="button" class="btn-close" data-bs-dismiss="alert"
+						aria-label="Close"></button>
+				</div>
+			</c:if>
+
+			<c:choose>
+				<c:when test="${not empty todos}">
+					<table class="table table-hover">
+						<thead class="table-primary">
+							<tr>
+								<th>ID</th>
+								<th>Username</th>
+								<th>Description</th>
+								<th>Date</th>
+								<th>Status</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="todo" items="${todos}">
+								<tr id="todo-row-${todo.id}"
+									class="${todo.done ? 'completed-row' : ''}">
+									<td>${todo.id}</td>
+									<td>${todo.username}</td>
+									<td>${todo.description}</td>
+									<td>${todo.date}</td>
+									<td class="status-cell"><span
+										class="status-badge ${todo.done ? 'status-completed' : 'status-pending'}"
+										onclick="toggleStatus(${todo.id}, ${todo.done})">
+											${todo.done ? 'Completed' : 'Pending'} </span></td>
+									<td>
+										<div class="action-buttons">
+											<a href="Complete-todo?id=${todo.id}"
+												onclick="toggleStatus(${todo.id}, ${todo.done})"
+												class="btn ${todo.done ? 'btn-warning' : 'btn-success'} btn-sm">
+												${todo.done ? 'Mark Pending' : 'Complete'} </a> <a
+												href="update-todo?id=${todo.id}"
+												class="btn btn-primary btn-sm">Update</a> <a
+												href="delete-todo?id=${todo.id}"
+												class="btn btn-danger btn-sm">Delete</a>
+										</div>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</c:when>
+				<c:otherwise>
+					<div class="text-center text-muted">No tasks to display!</div>
+				</c:otherwise>
+			</c:choose>
+		</div>
+	</div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+	
+	function showToast(message, type) {
+	    const toastContainer = document.querySelector('.toast-container');
+	    const toast = document.createElement('div');
+	    
+	    // Use standard JavaScript for class assignment instead of JSP EL
+	    toast.className = 'custom-toast text-white ' + (type === 'success' ? 'bg-success' : 'bg-danger');
+	    toast.innerHTML = message;
+	    
+	    toastContainer.appendChild(toast);
+	    
+	    setTimeout(() => {
+	        toast.style.animation = 'fadeOut 0.5s ease-out';
+	        setTimeout(() => toastContainer.removeChild(toast), 500);
+	    }, 3000);
+	}
+
+        function toggleStatus(id, currentStatus) {
+            const newStatus = !currentStatus;
+            const row = document.getElementById(`todo-row-${todo.id}`);
+            const statusBadge = row.querySelector('.status-badge');
+            
+            fetch(`Complete-todo?id=${todo.id}`)
+                .then(response => {
+                    if (response.ok) {
+                        if (newStatus) {
+                            row.classList.add('completed-row');
+                            statusBadge.classList.remove('status-pending');
+                            statusBadge.classList.add('status-completed');
+                            statusBadge.textContent = 'Completed';
+                            showToast('Task marked as complete!');
+                        } else {
+                            row.classList.remove('completed-row');
+                            statusBadge.classList.remove('status-completed');
+                            statusBadge.classList.add('status-pending');
+                            statusBadge.textContent = 'Pending';
+                            showToast('Task marked as pending!');
+                        }
+                    } else {
+                        showToast('Failed to update task status', 'error');
+                    }
+                })
+                .catch(error => {
+                    showToast('Error updating task status', 'error');
+                    console.error('Error:', error);
+                });
         }
 
-        function closeModal() {
-            document.getElementById('addTaskModal').style.display = 'none';
-        }
 
-        function markComplete(id) {
-            alert(`Marking task with ID ${id} as complete.`);
-            // Add AJAX or redirection logic here for marking a task as completed.
-        }
 
-        function deleteTask(id) {
-            const confirmDelete = confirm(`Are you sure you want to delete task with ID ${id}?`);
-            if (confirmDelete) {
-                alert(`Deleting task with ID ${id}.`);
-                // Add AJAX or redirection logic here for deleting a task.
-            }
-        }
+
     </script>
+    <%@include file="Common/footer.jspf"%>
 </body>
 </html>
