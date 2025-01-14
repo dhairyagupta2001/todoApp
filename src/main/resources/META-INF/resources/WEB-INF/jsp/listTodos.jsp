@@ -12,23 +12,26 @@
 	rel="stylesheet">
 <style>
 .classic-header {
-    font-family: 'Georgia', serif; /* Classic serif font */
-    font-size: 40px;
-    font-weight: 700;
-    color: #333;  /* Dark, classic text color */
-    text-align: center; /* Center alignment for a balanced look */
-    text-transform: uppercase; /* Uppercase for more formality */
-    letter-spacing: 2px; /* Increased letter spacing for elegance */
-    margin-bottom: 40px; /* Add more space beneath the header */
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+	font-family: 'Georgia', serif; /* Classic serif font */
+	font-size: 40px;
+	font-weight: 700;
+	color: #333; /* Dark, classic text color */
+	text-align: center; /* Center alignment for a balanced look */
+	text-transform: uppercase; /* Uppercase for more formality */
+	letter-spacing: 2px; /* Increased letter spacing for elegance */
+	margin-bottom: 40px; /* Add more space beneath the header */
+	text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+	/* Subtle shadow for depth */
 }
- body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #00c6ff, #0072ff); /* Bluish gradient */
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
+
+body {
+	font-family: 'Roboto', sans-serif;
+	background: linear-gradient(135deg, #00c6ff, #0072ff);
+	/* Bluish gradient */
+	color: #333;
+	margin: 0;
+	padding: 0;
+}
 
 h1 {
 	color: #333;
@@ -179,10 +182,13 @@ to {
 											<a href="Complete-todo?id=${todo.id}"
 												onclick="toggleStatus(${todo.id}, ${todo.done})"
 												class="btn ${todo.done ? 'btn-warning' : 'btn-success'} btn-sm">
-												${todo.done ? 'Mark Pending' : 'Complete'} </a> <a
-												href="update-todo?id=${todo.id}"
-												class="btn btn-primary btn-sm">Update</a> <a
-												href="delete-todo?id=${todo.id}"
+												${todo.done ? 'Mark Pending' : 'Complete'} </a>
+											<c:if test="${!todo.done}">
+												<a href="update-todo?id=${todo.id}"
+													class="btn btn-primary btn-sm">Update</a>
+											</c:if>
+											<!-- Delete Button -->
+											<a href="delete-todo?id=${todo.id}"
 												class="btn btn-danger btn-sm">Delete</a>
 										</div>
 									</td>
@@ -253,6 +259,6 @@ to {
 
 
     </script>
-    <%@include file="Common/footer.jspf"%>
+	<%@include file="Common/footer.jspf"%>
 </body>
 </html>

@@ -4,9 +4,20 @@ import java.time.LocalDate;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.FutureOrPresent;
 
+//Database My Sql
+//Static List of Todos =>Database(H2,My SQL)
+//JPA
+//Bean-> Database
+//This annotation will make automatically form tables in h2 database
+@Entity
 public class Todo {
+	@Id
+	@GeneratedValue
     private int id;
     
     @NotEmpty(message = "Username is required")

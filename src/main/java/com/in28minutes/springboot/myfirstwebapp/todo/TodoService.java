@@ -3,6 +3,7 @@ package com.in28minutes.springboot.myfirstwebapp.todo;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,8 @@ public class TodoService {
 	}
 
 	public List<Todo> findByUsername(String username) {
-		return todos;
+		Predicate<? super Todo> predicate = todos->todos.getUsername().equalsIgnoreCase(username);
+		return todos.stream().filter(predicate).toList();
 	}
 
 	public Todo findById(int id) {
